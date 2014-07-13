@@ -1,0 +1,9 @@
+  log => "path/to/somewhere",
+  
+  servers => [
+    "foo", "bar"
+  ],
+  
+  more => {
+    complex => [qw( s t u f f )]
+  },
