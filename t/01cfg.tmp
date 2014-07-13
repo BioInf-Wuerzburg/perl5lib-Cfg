@@ -7,3 +7,9 @@
   more => {
     complex => [qw( s t u f f )]
   },
+
+  subtree => {
+  	  a => "asd",
+	  b => "bsd",
+  
+  }

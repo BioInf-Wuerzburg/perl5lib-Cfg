@@ -65,21 +65,28 @@ can_ok($Class, qw(Read Read_Cfg Copy Copy_Cfg)); # including back-comp aliases
 
 ##- Read ---------------------------------------------------------------------##
 my %c1 = (
-  log => "path/to/somewhere",
+    log => "path/to/somewhere",
   
-  servers => [
-    "foo", "bar"
-  ],
+    servers => [
+      "foo", "bar"
+    ],
   
-  more => {
-    complex => [qw( s t u f f )]
-  },
+    more => {
+      complex => [qw( s t u f f )]
+    },
+
+    subtree => {
+  	  a => "asd",
+	  b => "bsd",
+    }
 );
 
 my %c2 = Cfg->Read($Dat_file);
-
-
 cmp_deeply(\%c1, \%c2, "Read");
+
+my %subtree = Cfg->Read($Dat_file, "subtree");
+cmp_deeply($c1{subtree}, \%subtree, "Read subtree");
+
 
 ##- Copy_Cfg -----------------------------------------------------------------##
 unlink($Tmp_file);
