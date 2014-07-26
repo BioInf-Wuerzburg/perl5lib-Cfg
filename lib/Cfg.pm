@@ -42,6 +42,7 @@ use Log::Log4perl qw(:easy :no_extra_logdie_message);
 use File::Spec;
 use File::Copy;
 use File::Basename;
+use File::Which;
 
 #use Data::Dumper;
 #$Data::Dumper::Sortkeys = 1;
@@ -156,6 +157,32 @@ sub Copy{
 	
 	return File::Spec->rel2abs($new_cfg_file);
 }
+
+
+=head2 Check_binaries
+
+Test fatally whether a set of binaries are exported and/or existent
+and executable.
+
+  $Cfg->Check_binares(qw(/path/to/some/bin some-exported-bin ..)) or die "Missing binaries";
+
+=cut
+
+sub Check_binaries{
+    foreach my $bin (@_){
+        unless(-e $bin && -x $bin){
+            if(my $fbin = which($bin)){
+                $L->logdie("Binary '$fbin' not executable") unless -e $fbin && -x $fbin;
+            }else{
+                $L->logdie("Binary '$bin' neither in PATH nor executable");
+            }
+        }
+        
+        $L->debug("Using binaries: ", which($bin) || $bin);
+    }
+    return 1;
+}
+
 
 
 =head1 AUTHOR
