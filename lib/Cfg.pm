@@ -37,7 +37,7 @@ no warnings 'qw';
 use strict;
 
 use Carp;
-use Log::Log4perl qw(:easy :no_extra_logdie_message);
+use Log::Log4perl qw(:easy);
 
 use File::Spec;
 use File::Copy;
@@ -169,12 +169,13 @@ and executable.
 =cut
 
 sub Check_binaries{
+    my $class = shift;
     foreach my $bin (@_){
         unless(-e $bin && -x $bin){
             if(my $fbin = which($bin)){
-                $L->logdie("Binary '$fbin' not executable") unless -e $fbin && -x $fbin;
+                $L->logcarp("Binary '$fbin' not executable") unless -e $fbin && -x $fbin;
             }else{
-                $L->logdie("Binary '$bin' neither in PATH nor executable");
+                $L->logcarp("Binary '$bin' neither in PATH nor executable");
             }
         }
         
